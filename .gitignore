@@ -45,6 +45,7 @@ coverage.out
 
 # Environment variables file
 .env
+.env.production
 
 # AWS CodeBuild artifacts
 artifacts/

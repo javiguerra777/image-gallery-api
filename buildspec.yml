@@ -3,21 +3,31 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      golang: 1.23
+      docker: 19
     commands:
       - echo "Installing dependencies"
-      - go mod tidy
+      - apt-get update -y
+      - apt-get install -y awscli
 
   pre_build:
     commands:
-      - echo "Running tests"
-      - go test ./...
+      - echo "Logging in to Amazon ECR"
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - REPOSITORY_URI=123456789012.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/my-repo
 
   build:
     commands:
-      - echo "Building Go application"
-      - go build -o myapp main.go
+      - echo "Building the Docker image"
+      - docker build -t myapp .
+      - docker tag myapp:latest $REPOSITORY_URI:latest
+
+  post_build:
+    commands:
+      - echo "Pushing the Docker image to ECR"
+      - docker push $REPOSITORY_URI:latest
+      - echo "Running the Docker container"
+      - docker run -d -p 8080:8080 --name myapp_container $REPOSITORY_URI:latest
 
 artifacts:
   files:
-    - myapp
+    - '**/*'
