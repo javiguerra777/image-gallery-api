@@ -28,3 +28,5 @@ Once you have your environment variables set up, run the `start_staging.sh` file
 bash start_staging.sh
 ```
 ## Deployment
+
+in progress
