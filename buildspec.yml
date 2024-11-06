@@ -3,18 +3,20 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      docker: 19
+      docker: 19  # Ensure Docker 19 is available
     commands:
       - echo "Installing dependencies"
       - apt-get update -y
-      - apt-get install -y docker awscli
+      - apt-get install -y docker.io awscli  # Install docker.io (which provides docker)
+      - sudo service docker start  # Start Docker service if not already running
+      - docker --version  # Verify Docker is installed
 
   pre_build:
     commands:
       - echo "Setting the repository URI"
       - REPOSITORY_URI=861276076608.dkr.ecr.us-west-1.amazonaws.com/image-gallery
       - echo "Logging in to Amazon ECR"
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
+      - aws ecr get-login-password --region us-west-1 | docker login --username AWS --password-stdin $REPOSITORY_URI
 
   build:
     commands:
