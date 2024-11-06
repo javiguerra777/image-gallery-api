@@ -1,5 +1,5 @@
 # Stage 1: Build the Go application
-FROM golang:1.20 AS build
+FROM golang:1.23.2 AS build
 
 # Set the working directory in the container
 WORKDIR /app
@@ -11,10 +11,10 @@ COPY . .
 RUN go mod tidy
 
 # Build the Go application
-RUN go build -o myapp .
+RUN go build -o myapp main.go
 
 # Stage 2: Prepare the runtime environment
-FROM debian:bullseye-slim
+FROM golang:1.23.2
 
 # Set the working directory
 WORKDIR /app
@@ -23,7 +23,7 @@ WORKDIR /app
 COPY --from=build /app/myapp .
 
 # Expose the port the app will run on
-EXPOSE 8080
+EXPOSE 4000
 
 # Set the default command to run the application
 CMD ["./myapp"]

@@ -10,12 +10,16 @@ import (
 )
 
 func main() {
+	var port string
 	if os.Getenv("ENV") == "development" {
 		fmt.Println("Loading .env file")
 		err := services.LoadGodotEnv()
 		if err != nil {
 			os.Exit(1)
 		}
+		port = "127.0.0.1:4000"
+	} else {
+		port = ":4000"
 	}
 	cfg := services.LoadConfig()
 	os.Setenv(("AWS_ACCESS_KEY_ID"), cfg.AwsConfig.AWS_ACCESS_KEY_ID)
@@ -34,5 +38,5 @@ func main() {
 	endpoint.ImageHandler(router, dynamodbClient, postgresdbClient)
 	endpoint.GalleriesHandler(router, dynamodbClient, postgresdbClient)
 	fmt.Println("Server is running")
-	router.Run(os.Getenv("PORT"))
+	router.Run(port)
 }
