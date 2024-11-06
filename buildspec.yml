@@ -7,14 +7,14 @@ phases:
     commands:
       - echo "Installing dependencies"
       - apt-get update -y
-      - apt-get install -y docker awscli
+      - apt-get install -y awscli
 
   pre_build:
     commands:
       - echo "Setting the repository URI"
       - REPOSITORY_URI=861276076608.dkr.ecr.us-west-1.amazonaws.com/image-gallery
       - echo "Logging in to Amazon ECR"
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION $REPOSITORY_URI
 
   build:
     commands:
