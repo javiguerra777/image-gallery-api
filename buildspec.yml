@@ -11,9 +11,10 @@ phases:
 
   pre_build:
     commands:
+      - echo "Setting the repository URI"
+      - REPOSITORY_URI=861276076608.dkr.ecr.us-west-1.amazonaws.com/image-gallery
       - echo "Logging in to Amazon ECR"
-      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
-      - REPOSITORY_URI=123456789012.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/my-repo
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
 
   build:
     commands:
