@@ -8,7 +8,7 @@ phases:
       - echo "Installing dependencies"
       - apt-get update -y
       - apt-get install -y docker.io awscli  # Install docker.io (which provides docker)
-      - sudo service docker start  # Start Docker service if not already running
+      - service docker start  # Start Docker service if not already running
       - docker --version  # Verify Docker is installed
 
   pre_build:
