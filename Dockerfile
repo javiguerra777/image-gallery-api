@@ -27,3 +27,4 @@ EXPOSE 4000
 
 # Set the default command to run the application
 CMD ["./myapp"]
+
