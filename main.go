@@ -9,6 +9,11 @@ import (
 	"image-gallery-server/endpoint"
 )
 
+func HealthCheck(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"message": "Server is running",
+	})
+}
 func main() {
 	var port string
 	if os.Getenv("ENV") == "development" {
@@ -35,6 +40,9 @@ func main() {
 		os.Exit(1)
 	}
 	router := gin.Default()
+	// public routes
+	router.GET("/health", HealthCheck)
+	// private routes
 	endpoint.ImageHandler(router, dynamodbClient, postgresdbClient)
 	endpoint.GalleriesHandler(router, dynamodbClient, postgresdbClient)
 	fmt.Println("Server is running")
